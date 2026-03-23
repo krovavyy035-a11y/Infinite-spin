@@ -1,3 +1,4 @@
+-- Original script
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ClaimReward = ReplicatedStorage
     :WaitForChild("Packages")
@@ -9,8 +10,30 @@ local ClaimReward = ReplicatedStorage
     :WaitForChild("RF")
     :WaitForChild("ClaimReward")
 
-for i = 1, 12983821029 do
-    local args = { i }
-    ClaimReward:InvokeServer(unpack(args))
-    task.wait(0.1) -- opcional, evita spam excessivo
+-- Anti-AFK implementation
+local antiAfkMessage = Instance.new("TextLabel")
+antiAfkMessage.Size = UDim2.new(0, 150, 0, 40)
+antiAfkMessage.Position = UDim2.new(1, -160, 0, 10)
+antiAfkMessage.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+antiAfkMessage.BackgroundTransparency = 0.2
+antiAfkMessage.TextColor3 = Color3.fromRGB(255, 255, 255)
+antiAfkMessage.TextSize = 18
+antiAfkMessage.Text = "Anti AFK Ativo"
+antiAfkMessage.Font = Enum.Font.SourceSansBold
+antiAfkMessage.TextScaled = true
+antiAfkMessage.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui").ScreenGui
+
+-- Animate the message sliding up
+local slideTween = TweenService:Create(antiAfkMessage, TweenInfo.new(1), {
+    Position = UDim2.new(1, -160, 0, -50)
+})
+slideTween:Play()
+
+-- Loop to keep the script running indefinitely
+while true do
+    for i = 1, 12983821029 do
+        local args = { i }
+        ClaimReward:InvokeServer(unpack(args))
+        task.wait(0.1)
+    end
 end
